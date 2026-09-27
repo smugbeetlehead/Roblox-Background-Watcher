@@ -1,0 +1,33 @@
+$tracked = @{}
+
+while ($true) {
+    $processes = Get-Process -Name "RobloxPlayerBeta" -ErrorAction SilentlyContinue
+
+    foreach ($p in $processes) {
+        if (-not $tracked.ContainsKey($p.Id)) {
+            $tracked[$p.Id] = $true
+        }
+    }
+
+    foreach ($id in @($tracked.Keys)) {
+        $p = Get-Process -Id $id -ErrorAction SilentlyContinue
+
+        if ($null -eq $p) {
+            $tracked.Remove($id)
+            continue
+        }
+
+        if ($p.MainWindowHandle -eq 0) {
+            Start-Sleep -Seconds 3
+
+            $p = Get-Process -Id $id -ErrorAction SilentlyContinue
+
+            if ($null -ne $p -and $p.MainWindowHandle -eq 0) {
+                Stop-Process -Id $id -Force -ErrorAction SilentlyContinue
+                $tracked.Remove($id)
+            }
+        }
+    }
+
+    Start-Sleep -Seconds 2
+}
