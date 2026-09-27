@@ -1,7 +1,7 @@
 # Usage
 ### Automatically removes roblox from running in background
 # How to enable this
-==
+
 ### copy the texts in <roblox-watcher.txt> file.
 ### open notepad, and paste
 ### Click on 'file', click on 'save as'
